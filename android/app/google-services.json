@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "122243161585",
+    "project_id": "chaton-c55c2",
+    "storage_bucket": "chaton-c55c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122243161585:android:3089cc6da78b86924e3850",
+        "android_client_info": {
+          "package_name": "com.example.flutter_final"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwC8BFuAjflcKqIiAd-rnz3EY7VlbdQOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
