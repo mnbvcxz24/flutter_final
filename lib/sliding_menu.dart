@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_final/pages/delete_account.dart';
 import 'package:flutter_final/pages/profile_page.dart';
+import 'package:flutter_final/pages/update_accountpassword.dart';
 import 'package:flutter_final/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -111,8 +113,21 @@ class _SlidingMenuState extends State<SlidingMenu> {
           ListTile(
             title: const Text('Change Password'),
             onTap: () {
-              // Handle item 2 tap
-              Navigator.pop(context); // Close the drawer
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const UpdateAccountPassword()));
+            },
+          ),
+          ListTile(
+            title: const Text('Account Settings'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DeleteAccount()));
             },
           ),
           ListTile(

@@ -136,8 +136,6 @@ class _LoginState extends State<Login> {
         });
       }
     } on FirebaseAuthException catch (e) {
-      print(e);
-
       if (mounted) {
         setState(() {
           errorMessage = getErrorMessage(e);

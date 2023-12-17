@@ -182,8 +182,6 @@ class _RegisterState extends State<Register> {
         'displayname': usernamecontroller.text
       });
     } on FirebaseAuthException catch (e) {
-      print(e);
-
       setState(() {
         errorMessage = "Registration failed. ${e.message}";
         Navigator.pop(context);

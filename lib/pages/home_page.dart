@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_final/pages/chat_page.dart';
-import '../components.dart/sliding_menu.dart';
+import '../sliding_menu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
