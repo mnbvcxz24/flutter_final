@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_final/pages/profile_page.dart';
 import 'package:flutter_final/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -23,7 +24,7 @@ class _SlidingMenuState extends State<SlidingMenu> {
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
 
-    String? imageUrl = await uploadImageToFirebaseStorage(img);
+    imageUrl = await uploadImageToFirebaseStorage(img);
 
     if (imageUrl != null) {
       String userId = _firebaseAuth.currentUser?.uid ?? '';
@@ -59,7 +60,9 @@ class _SlidingMenuState extends State<SlidingMenu> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(),
+            decoration: const BoxDecoration(
+              color: Colors.green,
+            ),
             child: Column(
               children: [
                 Stack(
@@ -75,13 +78,10 @@ class _SlidingMenuState extends State<SlidingMenu> {
                     Positioned(
                       bottom: -10,
                       left: 70,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: IconButton(
-                          onPressed: selectImage,
-                          icon: const Icon(Icons.add_a_photo),
-                          color: Colors.black,
-                        ),
+                      child: IconButton(
+                        onPressed: selectImage,
+                        icon: const Icon(Icons.photo_camera),
+                        color: Colors.black,
                       ),
                     )
                   ],
@@ -92,23 +92,33 @@ class _SlidingMenuState extends State<SlidingMenu> {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
+                    color: Colors.white,
                   ),
                 ),
               ],
             ),
           ),
           ListTile(
-            title: const Text('Item 1'),
+            title: const Text('Profile Details'),
             onTap: () {
-              // Handle item 1 tap
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ProfileDetails()));
+            },
+          ),
+          ListTile(
+            title: const Text('Change Password'),
+            onTap: () {
+              // Handle item 2 tap
               Navigator.pop(context); // Close the drawer
             },
           ),
           ListTile(
-            title: const Text('Item 2'),
+            title: const Text('Log out'),
             onTap: () {
-              // Handle item 2 tap
-              Navigator.pop(context); // Close the drawer
+              FirebaseAuth.instance.signOut(); // Close the drawer
             },
           ),
           // Add more list items as needed

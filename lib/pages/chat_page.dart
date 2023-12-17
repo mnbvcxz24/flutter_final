@@ -3,16 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_final/components.dart/chat_bubble.dart';
 import 'package:flutter_final/chat_service.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:giphy_picker/giphy_picker.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiverDisplayName;
   final String receiverUserID;
 
   const ChatPage({
-    super.key,
+    Key? key,
     required this.receiverDisplayName,
     required this.receiverUserID,
-  });
+  }) : super(key: key);
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -23,30 +26,64 @@ class _ChatPageState extends State<ChatPage> {
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  void sendMessage() async {
-    if (_messageController.text.isNotEmpty) {
-      await _chatService.sendMessage(
-          widget.receiverUserID, _messageController.text);
+  late String apiKey;
+  List<String> gifUrls = [];
+  GiphyGif? _selectedGif;
 
+  @override
+  void initState() {
+    super.initState();
+    apiKey = 'Xgs18NNzmIUWtkMRi36dWlJTNK5Q2NkS';
+  }
+
+  Future<void> pickGif() async {
+    final GiphyGif? gif = await GiphyPicker.pickGif(
+      context: context,
+      apiKey: apiKey,
+      fullScreenDialog: false,
+      showPreviewPage: false,
+    );
+
+    if (gif != null) {
+      setState(() {
+        _selectedGif = gif;
+        _sendGIF(_selectedGif!.url!);
+      });
+    }
+  }
+
+  void _sendGIF(String message) async {
+    if (_selectedGif != null) {
+      message = 'Giphy: ${_selectedGif!.url}';
+    }
+    await _chatService.sendMessage(widget.receiverUserID, message);
+  }
+
+  void _sendTextMessage() async {
+    final message = _messageController.text.trim();
+    if (message.isNotEmpty) {
+      await _chatService.sendMessage(widget.receiverUserID, message);
       _messageController.clear();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.receiverDisplayName),
       ),
       body: Column(
         children: [
+          if (_selectedGif != null) ...[
+            Image.network(_selectedGif!.url!),
+            const SizedBox(height: 10),
+          ],
           Expanded(
             child: _buildMessageList(),
           ),
           _buildMessageInput(),
-          const SizedBox(height: 25)
+          const SizedBox(height: 25),
         ],
       ),
     );
@@ -148,12 +185,19 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
           IconButton(
-            onPressed: sendMessage,
+            onPressed: _sendTextMessage,
             icon: const Icon(
               Icons.arrow_upward,
               size: 40,
             ),
-          )
+          ),
+          IconButton(
+            onPressed: pickGif,
+            icon: const Icon(
+              Icons.gif_box,
+              size: 40,
+            ),
+          ),
         ],
       ),
     );
